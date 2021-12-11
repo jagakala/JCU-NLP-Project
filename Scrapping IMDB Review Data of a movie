@@ -44,4 +44,4 @@ except:
 # convert list to the dataframe and save it like csv format
 df = pd.DataFrame(reviews)
 df.rename(columns={0 : "Review"},inplace=True)
-df.to_csv('data\movie_review_Jai Bhim.csv')
+df.to_csv('data\movie_review_Dune.csv')
