@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import pandas as pd
 path = "/Users/Jagakala/Downloads/chromedriver_win32/chromedriver" # Chrome web driver
 driver = webdriver.Chrome(path)
-driver.get("https://www.imdb.com/title/tt15097216/reviews") # Movie link to be scraped
+driver.get("https://www.imdb.com/title/tt1160419/reviews") # Movie link to be scraped
 movie_name = driver.find_element_by_class_name("parent").text # scrape movie name 
 movie_name = movie_name.replace(" ", "_") # replace spaces with _
 movie_name = movie_name.lower() + ".csv" # save full movie name with csv extension
