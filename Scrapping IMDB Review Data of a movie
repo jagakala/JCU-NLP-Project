@@ -1,0 +1,47 @@
+#scrapping dynamic using selenium
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import pandas as pd
+path = "/Users/Jagakala/Downloads/chromedriver_win32/chromedriver" # Chrome web driver
+driver = webdriver.Chrome(path)
+driver.get("https://www.imdb.com/title/tt15097216/reviews") # Movie link to be scraped
+movie_name = driver.find_element_by_class_name("parent").text # scrape movie name 
+movie_name = movie_name.replace(" ", "_") # replace spaces with _
+movie_name = movie_name.lower() + ".csv" # save full movie name with csv extension
+
+# For loop below will click load button to load all reviews
+for i in range(119): # 25reviews per page. 2975 reviews in total 
+        button = WebDriverWait(driver, 30).until(
+            EC.presence_of_element_located((By.ID, "load-more-trigger")) 
+        )
+        button.click()
+
+    except:
+        driver.implicitly_wait(5)
+
+
+reviews = []
+try:
+    # find all reviews
+    all_reviews = WebDriverWait(driver, 30).until(
+        EC.presence_of_all_elements_located((By.CLASS_NAME, "content"))
+    )
+    # find all ratings
+    all_ratings = WebDriverWait(driver, 30).until(
+        EC.presence_of_all_elements_located((By.CLASS_NAME, "rating-other-user-rating"))
+    )
+    full_review = ""
+    # create review like rating | review and append it to the reviews list
+    for i, j in zip(all_ratings,all_reviews):
+        full_review = i.text + " | " + j.text
+        reviews.append(full_review)
+
+except:
+    driver.quit()
+
+# convert list to the dataframe and save it like csv format
+df = pd.DataFrame(reviews)
+df.rename(columns={0 : "Review"},inplace=True)
+df.to_csv('data\movie_review_Jai Bhim.csv')
